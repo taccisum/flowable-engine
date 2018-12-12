@@ -168,12 +168,14 @@ public class ProcessInstanceHelper {
             tenantId = processDefinition.getTenantId();
         }
 
+        // TODO:: 看看创建实例的实际过程
         ExecutionEntity processInstance = CommandContextUtil.getExecutionEntityManager(commandContext)
                 .createProcessInstanceExecution(processDefinition, businessKey, tenantId, initiatorVariableName, initialFlowElement.getId());
 
         processInstance.setName(processInstanceName);
         
         // Callbacks
+        // TODO:: callback是什么
         if (callbackId != null) {
             processInstance.setCallbackId(callbackId);
         }
@@ -181,14 +183,17 @@ public class ProcessInstanceHelper {
             processInstance.setCallbackType(callbackType);
         }
 
+        // 记录流程实例创建历史
         CommandContextUtil.getHistoryManager(commandContext).recordProcessInstanceStart(processInstance);
 
+        // TODO:: 了解flowable的event以及 是如何dispatch的
         boolean eventDispatcherEnabled = CommandContextUtil.getProcessEngineConfiguration().getEventDispatcher().isEnabled();
         if (eventDispatcherEnabled) {
             CommandContextUtil.getProcessEngineConfiguration().getEventDispatcher().dispatchEvent(
                     FlowableEventBuilder.createEntityEvent(FlowableEngineEventType.PROCESS_CREATED, processInstance));
         }
 
+        // TODO:: data object是什么，还有variables
         processInstance.setVariables(processDataObjects(process.getDataObjects()));
 
         // Set the variables passed into the start command
@@ -205,14 +210,18 @@ public class ProcessInstanceHelper {
         
         // Fire events
         if (eventDispatcherEnabled) {
+            // 触发实体初始化事件
+            // TODO:: 初始化是指设置变量？
             CommandContextUtil.getProcessEngineConfiguration().getEventDispatcher()
                     .dispatchEvent(FlowableEventBuilder.createEntityWithVariablesEvent(FlowableEngineEventType.ENTITY_INITIALIZED, processInstance, variables, false));
         }
 
         // Create the first execution that will visit all the process definition elements
+        // TODO:: child execution?
         ExecutionEntity execution = CommandContextUtil.getExecutionEntityManager(commandContext).createChildExecution(processInstance);
         execution.setCurrentFlowElement(initialFlowElement);
 
+        // 创建实例后并不一定马上启动
         if (startProcessInstance) {
             startProcessInstance(processInstance, commandContext, variables);
         }
@@ -227,10 +236,13 @@ public class ProcessInstanceHelper {
     public void startProcessInstance(ExecutionEntity processInstance, CommandContext commandContext, Map<String, Object> variables) {
 
         Process process = ProcessDefinitionUtil.getProcess(processInstance.getProcessDefinitionId());
-        
+
+        // 处理可用的事件子流程
+        // TODO:: 暂不了解
         processAvailableEventSubProcesses(processInstance, process, commandContext);
 
         ExecutionEntity execution = processInstance.getExecutions().get(0); // There will always be one child execution created
+        // TODO:: agenda?
         CommandContextUtil.getAgenda(commandContext).planContinueProcessOperation(execution);
 
         if (CommandContextUtil.getProcessEngineConfiguration().getEventDispatcher().isEnabled()) {
