@@ -20,16 +20,19 @@ package org.flowable.common.engine.impl.interceptor;
 public interface CommandExecutor {
 
     /**
+     * 获取默认的配置
      * @return the default {@link CommandConfig}, used if none is provided.
      */
     CommandConfig getDefaultConfig();
 
     /**
+     * 通过指定的配置执行命令
      * Execute a command with the specified {@link CommandConfig}.
      */
     <T> T execute(CommandConfig config, Command<T> command);
 
     /**
+     * 通过默认的配置执行命令
      * Execute a command with the default {@link CommandConfig}.
      */
     <T> T execute(Command<T> command);

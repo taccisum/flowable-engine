@@ -17,11 +17,10 @@ package org.flowable.common.engine.impl.interceptor;
  * @author Tom Baeyens
  */
 public interface CommandInterceptor {
-
+    // 执行命令
     <T> T execute(CommandConfig config, Command<T> command);
-
+    // 获取下一个拦截器
     CommandInterceptor getNext();
-
+    // 设置下一个拦截器
     void setNext(CommandInterceptor next);
-
 }

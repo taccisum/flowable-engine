@@ -44,15 +44,18 @@ public class CommandInvoker extends AbstractCommandInterceptor {
 
             // Execute the command.
             // This will produce operations that will be put on the agenda.
+            // 将要执行的操作提到议程中
             agenda.planOperation(new Runnable() {
     
                 @Override
                 public void run() {
+                    // 在这个操作中执行command并将结果保存到command context中
                     commandContext.setResult(command.execute(commandContext));
                 }
             });
     
             // Run loop for agenda
+            // 执行议程中的所有操作
             executeOperations(commandContext);
     
             // At the end, call the execution tree change listeners.
@@ -67,10 +70,7 @@ public class CommandInvoker extends AbstractCommandInterceptor {
     }
 
     protected void executeOperations(final CommandContext commandContext) {
-        // 判断while is empty而不是for each，是因为在operation执行的过程中：
-        // 1. 有可能产生新的operation
-        // 2. 可能有其它operation被其它线程执行
-        // TODO:: 真的是这样吗？
+        // 判断while is empty而不是for each，是因为在operation执行的过程中有可能产生新的operation，而这些operation也应该接着被执行。
         while (!CommandContextUtil.getAgenda(commandContext).isEmpty()) {
             Runnable runnable = CommandContextUtil.getAgenda(commandContext).getNextOperation();
             executeOperation(runnable);
