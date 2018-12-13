@@ -362,6 +362,7 @@ public class CommandContextUtil {
     }
     
     public static FlowableEngineAgenda getAgenda(CommandContext commandContext) {
+        // TODO:: Session是一个什么概念
         return commandContext.getSession(FlowableEngineAgenda.class);
     }
     

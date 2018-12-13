@@ -26,6 +26,7 @@ import org.flowable.common.engine.impl.transaction.TransactionContextHolder;
  */
 public class Context {
 
+    // CommandContext以栈的形式存储在ThreadLocal中，保证线程隔离，同时还可以解决在一个Command中调用其它Command的问题
     protected static ThreadLocal<Stack<CommandContext>> commandContextThreadLocal = new ThreadLocal<>();
 
     public static CommandContext getCommandContext() {

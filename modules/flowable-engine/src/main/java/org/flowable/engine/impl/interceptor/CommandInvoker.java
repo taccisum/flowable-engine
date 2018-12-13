@@ -67,6 +67,10 @@ public class CommandInvoker extends AbstractCommandInterceptor {
     }
 
     protected void executeOperations(final CommandContext commandContext) {
+        // 判断while is empty而不是for each，是因为在operation执行的过程中：
+        // 1. 有可能产生新的operation
+        // 2. 可能有其它operation被其它线程执行
+        // TODO:: 真的是这样吗？
         while (!CommandContextUtil.getAgenda(commandContext).isEmpty()) {
             Runnable runnable = CommandContextUtil.getAgenda(commandContext).getNextOperation();
             executeOperation(runnable);

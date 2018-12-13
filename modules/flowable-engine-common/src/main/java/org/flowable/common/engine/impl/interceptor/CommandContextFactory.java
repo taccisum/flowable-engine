@@ -25,6 +25,7 @@ public class CommandContextFactory {
 
     public CommandContext createCommandContext(Command<?> cmd) {
         CommandContext commandContext = new CommandContext(cmd);
+        // TODO:: session factory?
         commandContext.setSessionFactories(sessionFactories);
         return commandContext;
     }

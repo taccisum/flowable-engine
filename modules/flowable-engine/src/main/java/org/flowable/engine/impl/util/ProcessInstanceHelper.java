@@ -243,6 +243,7 @@ public class ProcessInstanceHelper {
 
         ExecutionEntity execution = processInstance.getExecutions().get(0); // There will always be one child execution created
         // TODO:: agenda?
+        // 产生一个继续流程的操作并添加到agenda中
         CommandContextUtil.getAgenda(commandContext).planContinueProcessOperation(execution);
 
         if (CommandContextUtil.getProcessEngineConfiguration().getEventDispatcher().isEnabled()) {
