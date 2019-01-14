@@ -25,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * TODO:: 每一个命令被执行的时候都会创建一个议程实例，所有的操作都会被置入这个议程实例中，然后由命令执行器一直执行到议程中没有其它的命令为止。在命令执行期间，总是可以通过Context.getAgenda()获取到议程实例。
+ *
  * For each API call (and thus {@link Command}) being executed, a new agenda instance is created. On this agenda, operations are put, which the {@link CommandExecutor} will keep executing until all
  * are executed.
  *
@@ -94,6 +96,7 @@ public class DefaultFlowableEngineAgenda extends AbstractAgenda implements Flowa
 
     @Override
     public void planTriggerExecutionOperation(ExecutionEntity execution) {
+        // TODO:: 这些不同的operation有什么区别？
         planOperation(new TriggerExecutionOperation(commandContext, execution), execution);
     }
 

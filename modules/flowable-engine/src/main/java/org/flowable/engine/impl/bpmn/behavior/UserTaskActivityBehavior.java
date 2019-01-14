@@ -67,6 +67,7 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior {
         CommandContext commandContext = CommandContextUtil.getCommandContext();
         TaskService taskService = CommandContextUtil.getTaskService(commandContext);
 
+        // 创建task
         TaskEntity task = taskService.createTask();
         task.setExecutionId(execution.getId());
         task.setTaskDefinitionKey(userTask.getId());
@@ -117,6 +118,7 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior {
         if (StringUtils.isNotEmpty(activeTaskName)) {
             String name = null;
             try {
+                // 解析name表达式得出最终真正的name，下desc/due date等同
                 Object nameValue = expressionManager.createExpression(activeTaskName).getValue(execution);
                 if (nameValue != null) {
                     name = nameValue.toString();
@@ -255,6 +257,7 @@ public class UserTaskActivityBehavior extends TaskActivityBehavior {
             List<String> candidateGroups, TaskEntity task, ExpressionManager expressionManager, DelegateExecution execution) {
 
         if (StringUtils.isNotEmpty(assignee)) {
+            // 从这里可知assignee也支持表达式计算
             Object assigneeExpressionValue = expressionManager.createExpression(assignee).getValue(execution);
             String assigneeValue = null;
             if (assigneeExpressionValue != null) {

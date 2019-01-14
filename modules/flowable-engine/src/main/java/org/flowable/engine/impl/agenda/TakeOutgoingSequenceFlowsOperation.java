@@ -79,6 +79,7 @@ public class TakeOutgoingSequenceFlowsOperation extends AbstractOperation {
         }
 
         // When leaving the current activity, we need to delete any related execution (eg active boundary events)
+        // 离开当前节点时，清空所有关联的execution
         cleanupExecutions(currentFlowElement);
 
         if (currentFlowElement instanceof FlowNode) {
@@ -98,6 +99,7 @@ public class TakeOutgoingSequenceFlowsOperation extends AbstractOperation {
     }
 
     protected void handleActivityEnd(FlowNode flowNode) {
+        // 流程实例对应的execution永远无法离开流程节点？？ TODO:: 有些拗口
         // a process instance execution can never leave a flow node, but it can pass here whilst cleaning up
         // hence the check for NOT being a process instance
         if (!execution.isProcessInstanceType()) {
@@ -161,6 +163,7 @@ public class TakeOutgoingSequenceFlowsOperation extends AbstractOperation {
         if (outgoingSequenceFlows.size() == 0 && evaluateConditions) { // The elements that set this to false also have no support for default sequence flow
             if (defaultSequenceFlowId != null) {
                 for (SequenceFlow sequenceFlow : flowNode.getOutgoingFlows()) {
+                    // 如果没有符合要求的序列流，则使用默认的序列流
                     if (defaultSequenceFlowId.equals(sequenceFlow.getId())) {
                         outgoingSequenceFlows.add(sequenceFlow);
                         break;
@@ -189,11 +192,13 @@ public class TakeOutgoingSequenceFlowsOperation extends AbstractOperation {
             SequenceFlow sequenceFlow = outgoingSequenceFlows.get(0);
 
             // Reuse existing one
+            // 设置execution的当前flow element为寻找到的序列流
             execution.setCurrentFlowElement(sequenceFlow);
             execution.setActive(false);
             outgoingExecutions.add(execution);
 
             // Executions for all the other one
+            // 处理多个序列流的情况
             if (outgoingSequenceFlows.size() > 1) {
                 for (int i = 1; i < outgoingSequenceFlows.size(); i++) {
 
@@ -211,6 +216,7 @@ public class TakeOutgoingSequenceFlowsOperation extends AbstractOperation {
 
             // Leave (only done when all executions have been made, since some queries depend on this)
             for (ExecutionEntity outgoingExecution : outgoingExecutions) {
+                // 继续执行流程
                 agenda.planContinueProcessOperation(outgoingExecution);
             }
         }

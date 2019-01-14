@@ -957,6 +957,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
         initTransactionFactory();
 
         if (usingRelationalDatabase) {
+            // 初始化mybatis的sql session factory
             initSqlSessionFactory();
         }
 

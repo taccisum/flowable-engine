@@ -92,6 +92,7 @@ public class ContinueProcessOperation extends AbstractOperation {
         execution.setActive(true);
 
         // Check if it's the initial flow element. If so, we must fire the execution listeners for the process too
+        // 检查是否启动元素
         if (flowNode.getIncomingFlows() != null
                 && flowNode.getIncomingFlows().size() == 0
                 && flowNode.getSubProcess() == null) {
