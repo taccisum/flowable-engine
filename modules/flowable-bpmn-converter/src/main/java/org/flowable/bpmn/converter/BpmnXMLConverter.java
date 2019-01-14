@@ -414,6 +414,7 @@ public class BpmnXMLConverter implements BpmnXMLConstants {
                         multiInstanceParser.parseChildElement(xtr, activeSubProcessList.get(activeSubProcessList.size() - 1), model);
 
                     } else if (convertersToBpmnMap.containsKey(xtr.getLocalName())) {
+                        // map指定的converter进行处理
                         if (activeProcess != null) {
                             BaseBpmnXMLConverter converter = convertersToBpmnMap.get(xtr.getLocalName());
                             converter.convertToBpmnModel(xtr, model, activeProcess, activeSubProcessList);

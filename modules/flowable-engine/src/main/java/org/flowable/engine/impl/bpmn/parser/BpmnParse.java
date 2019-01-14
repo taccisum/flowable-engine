@@ -279,6 +279,7 @@ public class BpmnParse implements BpmnXMLConstants {
         for (Process process : bpmnModel.getProcesses()) {
             currentProcess = process;
             if (process.isExecutable()) {
+                // TODO:: bpmnParserHandlers是干啥用的？
                 bpmnParserHandlers.parseElement(this, process);
             }
         }

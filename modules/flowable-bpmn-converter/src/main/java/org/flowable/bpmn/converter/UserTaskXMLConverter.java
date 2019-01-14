@@ -40,6 +40,9 @@ import org.flowable.bpmn.model.alfresco.AlfrescoUserTask;
  */
 public class UserTaskXMLConverter extends BaseBpmnXMLConverter {
 
+    /**
+     * 子元素parser
+     */
     protected Map<String, BaseChildElementParser> childParserMap = new HashMap<>();
 
     /** default attributes taken from bpmn spec and from extension namespace */
